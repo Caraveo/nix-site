@@ -1,0 +1,314 @@
+/* Three-way theme. Pallet keeps the current warm scheme.
+   Black is dark mode. White is light mode. */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: inline-block;
+  background: url("/assets/nix-mark-black.png") center / contain no-repeat;
+}
+.site-nav .brand .brand-mark {
+  margin-left: 0;
+}
+.site-nav .brand span {
+  margin-left: 4px;
+}
+.footer-brand .brand-mark {
+  width: 30px;
+  height: 30px;
+}
+.nd-logo .brand-mark,
+html[data-theme="black"] .nd-logo .brand-mark,
+html[data-theme="white"] .nd-logo .brand-mark,
+html[data-theme="pallet"] .nd-logo .brand-mark {
+  width: 28px;
+  height: 28px;
+  background-image: url("/assets/nix-mark-white.png");
+}
+.nd-spark {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: inline-block;
+  font-size: 0;
+  line-height: 0;
+  background: currentColor;
+  -webkit-mask: url("/assets/nix-mark-white.png") center / contain no-repeat;
+  mask: url("/assets/nix-mark-white.png") center / contain no-repeat;
+}
+
+.site-nav {
+  justify-content: flex-start;
+}
+.site-nav .site-links {
+  margin-left: auto;
+  order: 2;
+}
+.site-nav .theme-toggle {
+  order: 3;
+  margin-left: 18px;
+  flex: none;
+}
+.menu-toggle {
+  order: 4;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+}
+.theme-toggle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: 10px/1 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 11px;
+  border-radius: 999px;
+}
+.theme-toggle button:hover {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+html[data-theme="black"] .theme-toggle [data-theme-choice="black"],
+html[data-theme="white"] .theme-toggle [data-theme-choice="white"],
+html[data-theme="pallet"] .theme-toggle [data-theme-choice="pallet"] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.skip-link {
+  color: var(--paper);
+}
+
+html[data-theme="black"] {
+  --ink: #f4f4f4;
+  --paper: #000000;
+  --line: #2c2c2c;
+  --accent: #ff6230;
+  --muted: #b5b5b5;
+  color-scheme: dark;
+  background: #000000;
+}
+html[data-theme="white"] {
+  --ink: #111111;
+  --paper: #ffffff;
+  --line: #e4e4e4;
+  --accent: #e64a20;
+  --muted: #5c5c5c;
+  color-scheme: light;
+  background: #ffffff;
+}
+html[data-theme="pallet"] {
+  color-scheme: light;
+}
+
+html[data-theme="black"] .brand-mark,
+html[data-theme="black"] .footer-brand .brand-mark {
+  background-image: url("/assets/nix-mark-white.png");
+}
+
+html[data-theme="black"] body,
+html[data-theme="white"] body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+html[data-theme="black"] :is(
+  .lead,
+  .caption,
+  .topic-grid p,
+  .journey p,
+  .page-directory p,
+  .layer p,
+  .decision small,
+  .platform small,
+  .control-copy,
+  .control-foot,
+  footer,
+  details p,
+  .num
+),
+html[data-theme="white"] :is(
+  .lead,
+  .caption,
+  .topic-grid p,
+  .journey p,
+  .page-directory p,
+  .layer p,
+  .decision small,
+  .platform small,
+  .control-copy,
+  .control-foot,
+  footer,
+  details p,
+  .num
+) {
+  color: var(--muted);
+}
+
+html[data-theme="black"] :is(
+  .page-hero .eyebrow,
+  .journey li:before,
+  .layer small,
+  th,
+  .directory-arrow,
+  .page-next > a span,
+  .control-statement strong
+),
+html[data-theme="white"] :is(
+  .page-hero .eyebrow,
+  .journey li:before,
+  .layer small,
+  th,
+  .directory-arrow,
+  .page-next > a span,
+  .control-statement strong
+) {
+  color: var(--accent);
+}
+
+html[data-theme="black"] .page-directory > a:hover h3,
+html[data-theme="white"] .page-directory > a:hover h3 {
+  color: var(--accent);
+}
+
+html[data-theme="black"] .topic-grid article {
+  border-top-color: var(--line);
+}
+
+html[data-theme="black"] .note,
+html[data-theme="white"] .note {
+  background: color-mix(in srgb, var(--ink) 6%, var(--paper));
+  border-left-color: var(--accent);
+  color: var(--ink);
+}
+html[data-theme="black"] .page-next {
+  background: #111111;
+}
+html[data-theme="white"] .page-next {
+  background: #f4f4f4;
+}
+html[data-theme="black"] .blueprint code {
+  background: #161616;
+  color: var(--ink);
+}
+html[data-theme="white"] .blueprint code {
+  background: #f3f3f3;
+  color: var(--ink);
+}
+html[data-theme="black"] .dot,
+html[data-theme="white"] .dot {
+  background: var(--accent);
+}
+
+html[data-theme="black"] .pill {
+  background: #f4f4f4;
+  color: #000000;
+}
+html[data-theme="white"] .pill {
+  background: #111111;
+  color: #ffffff;
+}
+
+html[data-theme="black"] .builders {
+  background: #0c0c0c;
+  color: #f4f4f4;
+}
+html[data-theme="white"] .builders {
+  background: #f6f6f6;
+  color: #111111;
+}
+html[data-theme="black"] .builders .eyebrow,
+html[data-theme="black"] .builders-lead,
+html[data-theme="black"] .builder-card p,
+html[data-theme="black"] .builders-bottom p,
+html[data-theme="white"] .builders .eyebrow,
+html[data-theme="white"] .builders-lead,
+html[data-theme="white"] .builder-card p,
+html[data-theme="white"] .builders-bottom p {
+  color: var(--muted);
+}
+html[data-theme="black"] .builders h2 em,
+html[data-theme="black"] .builder-card .num,
+html[data-theme="white"] .builders h2 em,
+html[data-theme="white"] .builder-card .num {
+  color: var(--accent);
+}
+html[data-theme="black"] .builder-card,
+html[data-theme="black"] .builders-bottom,
+html[data-theme="white"] .builder-card,
+html[data-theme="white"] .builders-bottom {
+  border-color: var(--line);
+}
+html[data-theme="black"] .builders .pill,
+html[data-theme="white"] .builders .pill {
+  background: var(--accent);
+  color: #1a1a1a;
+}
+
+html[data-theme="black"] .theme-toggle {
+  border-color: #4a4a4a;
+}
+html[data-theme="black"] .platform img[alt="Apple logo"] {
+  filter: invert(1);
+}
+
+html[data-theme="black"] .nix-demo,
+html[data-theme="white"] .nix-demo {
+  border-color: #5c4034;
+}
+
+@media (max-width: 1100px) {
+  .site-nav .brand .brand-mark {
+    display: inline-block;
+  }
+  .site-nav .theme-toggle {
+    margin-left: 12px;
+  }
+  .theme-toggle button {
+    padding: 8px 8px;
+    letter-spacing: 0.04em;
+  }
+}
+@media (max-width: 760px) {
+  .site-nav .site-links {
+    order: 5;
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+  .site-nav .theme-toggle {
+    order: 2;
+    margin-left: auto;
+  }
+  .menu-toggle {
+    order: 3;
+    margin-left: 8px;
+  }
+  .brand {
+    font-size: 30px;
+    letter-spacing: -2px;
+  }
+  .brand-mark,
+  .footer-brand .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+}
+@media (max-width: 420px) {
+  .theme-toggle button {
+    padding: 8px 6px;
+    font-size: 9px;
+  }
+}

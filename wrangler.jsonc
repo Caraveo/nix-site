@@ -1,6 +1,7 @@
 {
   "name": "nix",
   "account_id": "39bf5f7ab4e3524825a484793939cd6b",
+  "main": "api/worker.js",
   "compatibility_date": "2026-10-31",
   "workers_dev": false,
   "preview_urls": false,
@@ -9,7 +10,19 @@
   },
   "assets": {
     "directory": "./dist",
-    "html_handling": "drop-trailing-slash"
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "run_worker_first": ["/api", "/api/*", "/intent", "/intent/*", "/intents", "/intents/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nix-ask",
+      "database_id": "0b12480b-d064-4f63-863d-34a7d144b3d0"
+    }
+  ],
+  "triggers": {
+    "crons": ["15 8 * * *"]
   },
   "routes": [
     {
