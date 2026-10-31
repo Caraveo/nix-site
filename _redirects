@@ -1,2 +1,5 @@
 /build /custom 301
 /build/ /custom 301
+/opencode /pioneer 301
+/opencode/ /pioneer 301
+/opencode/* /pioneer 301

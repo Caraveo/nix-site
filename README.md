@@ -22,4 +22,4 @@ Demo behavior is in `assets/nix-demo.js`; styles are in `assets/nix-demo.css`. N
 
 ## Pages
 
-The homepage contains the interactive demo and links to `/why`, `/build`, `/architecture`, `/opencode`, `/pods`, `/memories`, and `/plan`. Each page is a standalone HTML document in its matching directory. Shared navigation styles and mobile menu behavior are in `assets/site.css` and `assets/site.js`. The build packages all eight pages, and Cloudflare serves clean URLs without trailing slashes. Legacy homepage section links redirect to the matching page.
+The homepage contains the interactive demo and links to `/why`, `/build`, `/architecture`, `/pioneer`, `/pods`, `/memories`, and `/plan`. Each page is a standalone HTML document in its matching directory. Shared navigation styles and mobile menu behavior are in `assets/site.css` and `assets/site.js`. The build packages all eight pages, and Cloudflare serves clean URLs without trailing slashes. Legacy homepage section links redirect to the matching page.
