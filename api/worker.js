@@ -1,3 +1,7 @@
+import { getAgentByName } from "agents";
+import { pioneerRoute } from "./pioneer.js";
+import { refund } from "./pioneer-ledger.js";
+export { PioneerAgent } from "./pioneer-agent.js";
 import { cancelSubscription, chargeOpaque, createSubscription, profileFromTransaction, transactionSubscriptionId } from "./authnet.js";
 import { cipherMac, sealToken, tokenMac } from "./cipher.js";
 import { publicPacks, requirePack } from "./units.js";
@@ -325,7 +329,7 @@ async function ask(request, env) {
   await limit(env, request, "ask", 60, 60 * 1000);
   const hash = await digestToken(env, "access", bearer(request));
   const row = await env.DB.prepare(
-    `SELECT t.expires_at, t.revoked_at, s.id AS subscription_id, s.status, s.paid_through, s.plan, s.units
+    `SELECT t.expires_at, t.revoked_at, s.id AS subscription_id, s.status, s.paid_through, s.plan, s.units, s.authnet_transaction_id
      FROM tokens t JOIN subscriptions s ON s.id = t.subscription_id
      WHERE t.token_hash = ? AND t.kind = 'access'`,
   ).bind(hash).first();
@@ -551,7 +555,7 @@ async function loadAccess(request, env) {
   requireConfig(env);
   const hash = await digestToken(env, "access", bearer(request));
   const row = await env.DB.prepare(
-    `SELECT t.expires_at, t.revoked_at, s.id AS subscription_id, s.status, s.paid_through, s.plan, s.units
+    `SELECT t.expires_at, t.revoked_at, s.id AS subscription_id, s.status, s.paid_through, s.plan, s.units, s.authnet_transaction_id
      FROM tokens t JOIN subscriptions s ON s.id = t.subscription_id
      WHERE t.token_hash = ? AND t.kind = 'access'`,
   ).bind(hash).first();
@@ -759,6 +763,8 @@ async function health(env) {
 
 async function route(request, env, url) {
   const path = url.pathname.replace(/\/+$/, "") || "/";
+  if (path.startsWith("/intent/v1/")) return pioneerRoute(request, env, path, loadAccess,
+    name => getAgentByName(env.PIONEER, name));
   if (request.method === "GET" && path === "/api/v1/health") return health(env);
   if (request.method === "GET" && path === "/api") return json({ ...catalog(), health: "/api/v1/health" });
   if (request.method === "GET" && (path === "/intents" || path === "/intent")) return intentCatalog();
@@ -775,8 +781,19 @@ async function route(request, env, url) {
   throw new HttpError(404, "not_found");
 }
 
+async function reconcilePioneer(env) {
+  const now = Date.now();
+  const stale = await env.DB.prepare("SELECT id, owner FROM pioneer_calls WHERE status = 'pending' AND updated_at < ? LIMIT 100")
+    .bind(now - 30 * 60 * 1000).all();
+  for (const reservation of stale.results) await refund(env.DB, reservation, now);
+  await env.DB.prepare(
+    "UPDATE pioneer_calls SET response_json = NULL WHERE status = 'complete' AND response_json IS NOT NULL AND updated_at < ?"
+  ).bind(now - 30 * 86400000).run();
+}
+
 async function markPastDue(env) {
   const now = Date.now();
+  await reconcilePioneer(env);
   await env.DB.prepare(
     "UPDATE subscriptions SET status = 'past_due', updated_at = ? WHERE status = 'active' AND plan != 'lifetime' AND paid_through < ?",
   ).bind(now, now).run();
@@ -801,7 +818,7 @@ export default {
     }
     return env.ASSETS.fetch(request);
   },
-  async scheduled(_event, env, ctx) {
-    ctx.waitUntil(markPastDue(env));
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(event.cron === "15 8 * * *" ? markPastDue(env) : reconcilePioneer(env));
   },
 };

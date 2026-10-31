@@ -1,0 +1,16 @@
+{
+  "name": "nix-intent-service",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test api/*.test.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "agents": "0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "wrangler": "4.156.0"
+  }
+}
