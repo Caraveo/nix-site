@@ -31,10 +31,14 @@ function json(data, status = 200) {
   });
 }
 
-function requireConfig(env) {
+function requireTokenConfig(env) {
   if (!env.DB || !/^[0-9a-fA-F]{64}$/.test(env.TOKEN_PEPPER || "")) {
     throw new HttpError(500, "misconfigured");
   }
+}
+
+function requireConfig(env) {
+  requireTokenConfig(env);
   if (!env.AUTHNET_API_LOGIN_ID || !env.AUTHNET_TRANSACTION_KEY || !/^[0-9a-fA-F]{128}$/.test(env.AUTHNET_SIGNATURE_KEY || "")) {
     throw new HttpError(500, "misconfigured");
   }
@@ -552,8 +556,9 @@ async function grantIncluded(env, subscriptionId, plan) {
 }
 
 async function loadAccess(request, env) {
-  requireConfig(env);
-  const hash = await digestToken(env, "access", bearer(request));
+  const token = bearer(request);
+  requireTokenConfig(env);
+  const hash = await digestToken(env, "access", token);
   const row = await env.DB.prepare(
     `SELECT t.expires_at, t.revoked_at, s.id AS subscription_id, s.status, s.paid_through, s.plan, s.units, s.authnet_transaction_id
      FROM tokens t JOIN subscriptions s ON s.id = t.subscription_id
