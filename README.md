@@ -19,3 +19,7 @@ Platform icons are from Devicon; their license is in `assets/devicon-LICENSE.txt
 The prompt opens Author, Wallet, Play, Memories, Desktop, or Terminal. Author saves manuscript chapters in browser local storage and exports plain text. Wallet uses session-only sample funds. The two Play scenes are original canvas mini games, not the commercial titles. The terminal supports a bounded set of workspace commands.
 
 Demo behavior is in `assets/nix-demo.js`; styles are in `assets/nix-demo.css`. No backend or model service is required.
+
+## Pages
+
+The homepage contains the interactive demo and links to `/why`, `/build`, `/architecture`, `/opencode`, `/pods`, `/memories`, and `/plan`. Each page is a standalone HTML document in its matching directory. Shared navigation styles and mobile menu behavior are in `assets/site.css` and `assets/site.js`. The build packages all eight pages, and Cloudflare serves clean URLs without trailing slashes. Legacy homepage section links redirect to the matching page.
